@@ -1,0 +1,4 @@
+----2022-06-04 23:13:35----
+{"nLada":"+1","nLadaCustom":"","nTelefono":"8181818118","nPrioridad":"0","sCampania":"87184","sMensaje":"718"}
+}
+ensaje":"mensaje de prueba2"}

@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <title>Vivaro</title>
+
+  <link href="assets/bootstrap.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+
+    .b-example-divider {
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .valid-feedback{
+      display: block;
+    }
+  </style>
+
+
+  <!-- Custom styles for this template -->
+  <link href="dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6" href="#">Vivaro</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+      data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+   
+  </header>
+
+  <div class="container">
+    <div class="row">
+    
+
+      <main class="col-md-12">
+        <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">Enviar SMS</h1>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <form class="row g-3" id="form">
+              <div class="col-md-6" id="divLadaSelect">
+                <label for="nLada" class="form-label">LADA</label>
+                <select class="form-control" id="nLada" name="nLada" required >
+                  <option selected disabled>Seleccione una opción</option>
+                </select>
+              </div>
+              <div class="col-md-6 d-none" id="divLadaInput">
+                <label for="nLadaCustom" class="form-label">Escriba la LADA</label>
+                <input class="form-control" type="text" id="nLadaCustom" name="nLadaCustom" maxLength="4">
+              </div>
+              <div class="col-md-6">
+                <label for="nTelefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="" name="nTelefono" required maxLength="10" title="Teléfono">
+              </div>
+              <div class="col-6">
+                <label for="nPrioridad" class="form-label">Prioridad</label>
+                <select class="form-control" id="nPrioridad" name="nPrioridad" required title="Prioridad">
+                  <option selected disabled>Seleccione una opción</option>
+                  <option value="0">Normal</option>
+                  <option value="1">Alta</option>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="sCampania" class="form-label">Campaña</label>
+                <input type="text" class="form-control" id="sCampania" name="sCampania" required maxLength="50" title="Campaña">
+                <div id="nRestanteCampania" class="valid-feedback"><span>50</span> Caracteres restantes</div>
+              </div>
+              <div class="col-12">
+                <label for="sMensaje" class="form-label">Mensaje</label>
+                <textarea class="form-control" id="sMensaje" name="sMensaje" required maxLength="160"  title="Mensaje"></textarea>
+                <div id="nRestanteMensaje" class="valid-feedback"><span>160</span> Caracteres restantes</div>
+              </div>
+              <div class="col-12">
+                <a style="cursor:pointer" class="btn btn-primary" id="sendMessage">Enviar</a>
+              </div>
+            </form>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="assets/bootstrap.bundle.min.js"></script>
+  <script src="assets/feather.min.js"></script>
+  <script src="assets/mainClass.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script>
+ 
+   let ladas = {
+      1: {
+        lada: '52',
+        pais: 'México',
+      },
+      2: {
+        lada: '+1',
+        pais: 'EE. UU.',
+      },
+      3: {
+        lada: '503',
+        pais: 'El salvador',
+      },
+      4: {
+        lada: '55',
+        pais: 'Brasil',
+      },
+      5: {
+        lada: '51',
+        pais: 'Perú',
+      },
+    }
+
+    /**
+     *Inidicamos cuantos son los caracteres que permitiran algunos inputs
+    */
+    let maxCampaniaLen = 50;
+    let maxMensajeLen  = 160;
+    
+    /**
+     * Instancia de clase propia utilizada como apoyo en mis desarrollos  
+     */ 
+    let iMainClass = new mainClass();
+
+    $(window).on('load',()=>{
+
+      /**
+       * LLena el selec con la información contenida en el objeto de LADAs
+       **/
+      $.each(ladas,function(index,value){
+        $('#nLada').append('<option value="'+value.lada+'">'+value.lada+' - '+value.pais+'</option>');
+      });
+      $('#nLada').append('<option value="-1">Otra</option>');
+
+
+      /**
+       *agregamos evento onChange para que cuando se seleccione la opción "otra"
+       * ese select se cambie por un input y permita ingresar manualmente la lada
+       */
+      $('#nLada').on('change',function(){
+        let value = parseInt($(this).val());
+        
+        if(value < 0){
+          $('#divLadaSelect').addClass('d-none');
+          $('#divLadaInput').removeClass('d-none');
+        }else{
+          $('#nTelefono').trigger('focus');
+        }
+      });
+
+      /**
+       * Le indica al usuario cuantos caracteres para la campaña le restan
+       * al usuario
+       */
+      $('#sCampania').on('keyup',()=>{
+        
+        let texto     = $('#sCampania').val();
+        let restante  = maxCampaniaLen - texto.length;
+
+        $('#nRestanteCampania span').html(restante);
+        if(restante < 0){
+          $('#nRestanteCampania').addClass('invalid-feedback');
+          alert('Solo se permiten '+maxCampaniaLen+' caracteres');
+        }
+
+      })
+
+      /**
+       * Le indica al usuario cuantos caracteres para el mensaje le restan
+       * al usuario
+       */
+      $('#sMensaje').on('keyup',()=>{
+        let texto     = $('#sMensaje').val();
+        let restante  = maxMensajeLen - texto.length;
+        $('#nRestanteMensaje span').html(restante);
+        if(restante < 0){
+          $('#nRestanteMensaje').addClass('invalid-feedback');
+          alert('Solo se permiten '+maxMensajeLen+' caracteres');
+        }
+
+      });
+   
+
+      /**
+       * Evento Clic paa enviar el mensaje
+       * */
+      $('#sendMessage').on('click',function(){
+
+        /*Con el metodo serialize de la "mainClass" se recorren los inputs del 
+        formulario y en caso de exisitir error los muestra en un alert como se indica en la 
+        función anonima que recibe como argumento*/
+        let obj = iMainClass.serialize('#form',(data)=>{
+          console.log(data)
+          switch (data.type) {
+            case "valueRequired":
+              alert("El campo "+data.title+" es requerido");
+              break;
+            case "minLength":
+              alert("El campo "+data.title+" debe contener minimo "+data.infoInput.min+" caractereres");
+              break;
+            case "maxLength":
+              alert("El campo "+data.title+" debe contener maximo "+data.infoInput.max+" caractereres");
+              break;
+          
+            default:
+              break;
+          }
+        });
+
+
+        /*Si el objeto es diferente a falso, este contendrá los datos del formulario*/       
+        if(obj){
+          /*Y al utilizar el metodo getAync se crea la peticion asincrona al backend, para 
+          más información de este metodo consultar sus comentarios en el archivo mainClass.js en assets */
+          iMainClass.getAsync({
+            method: 'post',
+            url:    'php/sendMessage.php',
+            headers:()=>{
+                return [
+                    ['Accept','json/application'],
+                ]
+            },
+            data:()=>{return obj},
+            onSuccess:(r)=>{
+              if(r.error)alert(r.info);
+              else alert("Exito!")
+            }
+        })
+        }
+      })
+   
+    });
+  </script>
+</body>
+
+</html>
